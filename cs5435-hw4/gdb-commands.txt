@@ -1,0 +1,20 @@
+To compile and run sploitX:
+`gcc -ggdb -m32 sploitX.c -o sploitX ; echo whoami | ./sploitX`
+
+To debug with gdb:
+`gdb -e sploitX -s /srv/targetX`
+Then, run `catch exec`
+Then, run `run`. Now you are in /srv/targetX with the sploitX buffer and environment variables
+Then, put breakpoints in the beginning of all functions and important lines in targetX.c `b main` `b foo`, ...
+To view stack contents:
+`x/50x $sp`
+To view environment variable addresses:
+`x/300s *((char **)environ)`
+To inspect argc/argv addresses and values
+`p argc[#]` and/or `p &argc[#]`
+
+Tips:
+- Return address should point somewhere in between the NOP sled (can be in the beginning, middle, anywhere in between) IF shellcode exists in buffer
+- Return address should point to the beginning of the shellcode environment variable IF shellcode can only be in the environment variable
+- `p system`, `p exit` `find, {address of system}, +999999999, "/bin/sh" -> for sploit4.c
+  - system and exit addresses are the same for host and target executable (idk if that is right)

